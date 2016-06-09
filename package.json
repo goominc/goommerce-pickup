@@ -6,7 +6,14 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "goommerce-api-client": "github:goominc/goommerce-api-client",
+    "goommerce-redux": "github:goominc/goommerce-redux",
+    "lodash": "^4.13.1",
     "react": "^15.1.0",
-    "react-native": "^0.27.2"
+    "react-native": "^0.27.2",
+    "react-native-button": "^1.6.0",
+    "react-native-vector-icons": "^2.0.3",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2"
   }
 }
