@@ -15,7 +15,7 @@ export default React.createClass({
       <View style={styles.container}>
         <View style={styles.desc}>
           <Text style={{ fontSize: 30, fontWeight: '400' }}>Link<Text style={{ fontWeight: '900' }}>Shop</Text>s</Text>
-          <Text style={{ color: '#bbbbbb' }}>링크샵스 판매자 전용App 입니다.</Text>
+          <Text style={{ color: '#bbbbbb' }}>링크샵스 사입전용 픽업App</Text>
         </View>
         <TextInput
           autoCapitalize='none'
