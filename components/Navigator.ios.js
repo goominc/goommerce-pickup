@@ -1,25 +1,34 @@
+import _ from 'lodash';
 import React from 'react';
 import { Navigator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import _ from 'lodash';
-
-import NavBarBack from '../components/NavBarBack'
+import Button from 'react-native-button';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const NavigationBarRouteMapper = {
   LeftButton(route, navigator, index, navState) {
     if (index === 0) {
       return null;
     }
-    const { title } = navState.routeStack[index - 1];
-    return (<NavBarBack title={index > 1 && title} pop={navigator.pop}/>);
+    return (
+      <Button onPress={() => navigator.pop()} containerStyle={styles.navBarButton}>
+        <Ionicons name='ios-arrow-back' size={23} color='white' />
+      </Button>
+    );
   },
   RightButton(route, navigator, index, navState) {
     const { component } = route;
     const rightButton = component.rightButton || _.get(component, 'WrappedComponent.rightButton');
-    return rightButton && rightButton(navigator);
+    if (rightButton) {
+      return (
+        <View style={styles.navBarButton}>
+          {rightButton(navigator)}
+        </View>
+      );
+    }
   },
   Title(route, navigator, index, navState) {
     return (
-      <Text style={[styles.navBarText, styles.navBarTitleText]}>
+      <Text style={styles.navBarTitleText}>
         {route.title}
       </Text>
     );
@@ -30,7 +39,7 @@ export default React.createClass({
   renderScene(route, navigator) {
     return (
       <View style={styles.scene}>
-        <route.component {...route.props} push={navigator.push} pop={navigator.pop} />
+        <route.component {...route.props} {...this.props.childProps} push={navigator.push} pop={navigator.pop} />
       </View>
     );
   },
@@ -59,30 +68,25 @@ const styles = StyleSheet.create({
   scene: {
     flex: 1,
     paddingTop: 64, // NavigationBar
-    paddingBottom: 50, // TabBarIOS
+    // paddingBottom: 50, // TabBarIOS
     backgroundColor: 'white',
   },
   navBar: {
-    backgroundColor: '#3f4c5d',
+    backgroundColor: '#3949AB',
     borderBottomWidth: 1,
     borderBottomColor: '#3f4c5d'
-  },
-  navBarText: {
-    fontSize: 16,
-    marginVertical: 10,
   },
   navBarTitleText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 16,
     marginVertical: 9,
   },
-  navBarLeftButton: {
+  navBarButton: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginVertical: 9,
     paddingLeft: 10,
-  },
-  navBarRightButton: {
     paddingRight: 10,
-  },
-  navBarButtonText: {
-    color: '#5890FF',
   },
 });

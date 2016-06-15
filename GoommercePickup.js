@@ -3,7 +3,8 @@ import { Alert, AsyncStorage, Platform, StyleSheet, Text, View } from 'react-nat
 
 import { Provider } from 'react-redux'
 import { config as configApiClient } from 'goommerce-api-client';
-import configureStore, { errorActions, orderActions } from 'goommerce-redux';
+import configureStore, { errorActions } from 'goommerce-redux';
+import moment from 'moment';
 
 import App from './containers/App';
 
@@ -56,7 +57,7 @@ export default React.createClass({
     }
     return (
       <Provider store={store}>
-        <App />
+        <App date={moment().format('YYYY-MM-DD')}/>
       </Provider>
     );
   }

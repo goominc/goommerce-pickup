@@ -1,7 +1,8 @@
-import React from 'react';
-import { AsyncStorage, StatusBar, TabBarIOS, View } from 'react-native';
+import _ from 'lodash';
+import React, { PropTypes } from 'react';
+import { AsyncStorage } from 'react-native';
 import { connect } from 'react-redux'
-import { authActions } from 'goommerce-redux';
+import { authActions, uncleActions } from 'goommerce-redux';
 
 import EmptyView from '../components/EmptyView';
 import Navigator from '../components/Navigator';
@@ -9,16 +10,27 @@ import Signin from '../components/Signin';
 import routes from '../routes';
 
 const App = React.createClass({
+  childContextTypes: {
+    refresh: PropTypes.func,
+  },
   getInitialState: function() {
     return {
       selectedTab: 'orders',
     };
   },
+  getChildContext() {
+    return {
+      refresh() {
+        this.props.loadUncleOrders(this.props.date);
+      },
+    };
+  },
   componentDidMount() {
-    const { auth, whoami } = this.props;
+    const { auth, whoami, loadUncleOrders, date } = this.props;
     if (auth.bearer && !auth.email) {
       whoami();
     }
+    loadUncleOrders(date);
   },
   signin(email, password) {
     this.props.login(email, password).then(
@@ -35,34 +47,14 @@ const App = React.createClass({
     }
 
     return (
-      <View style={{ flex: 1 }}>
-        <StatusBar barStyle="light-content" />
-        <TabBarIOS
-          barTintColor="white">
-          <TabBarIOS.Item
-            icon={require('./images/tab_product.png')}
-            title="상품픽업"
-            selected={this.state.selectedTab === 'pickup'}
-            onPress={() => {
-              this.setState({ selectedTab: 'pickup' });
-            }}>
-            <Navigator initialRoute={routes.dashboard()} />
-          </TabBarIOS.Item>
-          <TabBarIOS.Item
-            icon={require('./images/tab_profile.png')}
-            title="내 정보"
-            selected={this.state.selectedTab === 'profile'}
-            onPress={() => {
-              this.setState({ selectedTab: 'profile' });
-            }}>
-            <Navigator initialRoute={routes.profile()} />
-          </TabBarIOS.Item>
-        </TabBarIOS>
-      </View>
+      <Navigator initialRoute={routes.dashboard()} childProps={_.pick(this.props, 'date', 'orders', 'brands', 'buyers')} />
     );
   }
 });
 
 export default connect(
-  (state) => ({ auth: state.auth }) , authActions
+  (state, ownProps) => {
+    const { key } = uncleActions.loadUncleOrders(ownProps.date);
+    return { auth: state.auth, ...state.uncle[key] };
+  }, _.assign({}, authActions, uncleActions)
 )(App);
