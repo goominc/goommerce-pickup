@@ -15,7 +15,7 @@ export default React.createClass({
       <View style={styles.container}>
         <View style={styles.desc}>
           <Text style={{ fontSize: 30, fontWeight: '400' }}>Link<Text style={{ fontWeight: '900' }}>Shop</Text>s</Text>
-          <Text style={{ color: '#bbbbbb' }}>링크샵스 사입전용 픽업App</Text>
+          <Text style={{ color: '#0E144F', fontWeight: 'bold' }}>PICK UP</Text>
         </View>
         <TextInput
           autoCapitalize='none'
@@ -41,8 +41,11 @@ export default React.createClass({
           containerStyle={styles.signinContainer}
           onPress={this.signin}
         >
-          Login
+          로그인
         </Button>
+        <View style={styles.footer}>
+          <Text style={{ color: '#FF5401' }}>구매를 원하시면 <Text style={{ fontWeight: 'bold' }}>여기</Text>를 눌러주세요</Text>
+        </View>
       </View>
     );
   },
@@ -60,7 +63,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   input: {
-    backgroundColor: '#eeeeee',
+    backgroundColor: '#EBEDF9',
     borderRadius: 6,
     height: 50,
     marginHorizontal: 20,
@@ -69,11 +72,15 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   signinContainer: {
-    backgroundColor: '#1fcbf6',
+    alignSelf: 'stretch',
+    backgroundColor: '#42A5F5',
     borderRadius: 6,
-    marginTop: 20,
+    marginVertical: 20,
+    marginHorizontal: 20,
     overflow:'hidden',
-    paddingHorizontal: 60,
     paddingVertical: 10,
+  },
+  footer: {
+    alignItems: 'center',
   },
 });

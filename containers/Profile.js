@@ -12,9 +12,7 @@ const Profile = React.createClass({
     brands.forEach((b) => loadBrand(b.id));
   },
   signout() {
-    this.props.logout(pushToken && (playerId || userId)).then(
-      () => AsyncStorage.removeItem('bearer')
-    );
+    this.props.logout().then(() => AsyncStorage.removeItem('bearer'));
   },
   render() {
     const { brands = [] } = this.props;
