@@ -24,20 +24,22 @@ export default React.createClass({
   onRefresh() {
   },
   renderRow(row, sectionID, rowID, highlightRow) {
-    const { brands, push } = this.props;
-    const brand = brands[_.head(row).brandId];
-    const brandName = _.get(brand, 'name.ko');
-    const location = `${_.get(brand, 'data.location.floor')} ${_.get(brand, 'data.location.flatNumber')}`;
+    const { buyers } = this.props;
+    const shortId = _.padStart(row.orderId, 3, '0').substr(-3);
     return (
       <TouchableHighlight
-        onPress={() => push(routes.brand(`${brandName} ${location}`, { brandId: brand.id }))}
+        onPress={() => console.log('cc')}
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >
         <View style={styles.row}>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{brandName}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{location}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(row)}</Text>
+          <View style={styles.checkboxContainer}>
+            <Button>
+              <Ionicons name='ios-checkbox' size={30} color='#384DA8' />
+            </Button>
+          </View>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{`링크# ${_.get(buyers[row.buyerId], 'data.order.name', shortId)}`}</Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}></Text>
           <Text style={[styles.sectionText, { flex: 1 }]}></Text>
         </View>
       </TouchableHighlight>
@@ -47,16 +49,16 @@ export default React.createClass({
     return (
       <View style={styles.section}>
         <Text style={[styles.sectionText, { flex: 1 }]}>
-          매장명
+          픽업확인
         </Text>
         <Text style={[styles.sectionText, { flex: 1 }]}>
-          위치
+          주문자명
         </Text>
         <Text style={[styles.sectionText, { flex: 1 }]}>
-          전체주문
+          상품수량
         </Text>
         <Text style={[styles.sectionText, { flex: 1 }]}>
-          완료된 주문
+          포장완료시간
         </Text>
       </View>
     );
@@ -71,12 +73,10 @@ export default React.createClass({
     );
   },
   render() {
-    const { date, orders, brands, buildingId } = this.props;
-    const brandOrders = _.chain(orders)
-      .filter((o) => (_.get(brands[o.brandId], 'data.location.building.id') === buildingId))
-      .groupBy('brandId').value();
+    const { date, orders, brands, brandId } = this.props;
+    const brandOrders = _.filter(orders, (o) => (o.brandId === brandId));
     // FIXME: possible performance issue...
-    const dataSource = this.dataSource.cloneWithRows(_.values(brandOrders));
+    const dataSource = this.dataSource.cloneWithRows(brandOrders);
     return (
       <RefreshableList
         dataSource={dataSource}
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 2,
     backgroundColor: 'white',
   },
   rowSeparator: {
@@ -137,5 +137,10 @@ const styles = StyleSheet.create({
   sectionText: {
     textAlign: 'center',
     fontWeight: 'bold',
+    paddingVertical: 10,
+  },
+  checkboxContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
 });
