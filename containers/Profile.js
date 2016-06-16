@@ -31,7 +31,7 @@ const Profile = React.createClass({
           containerStyle={styles.signoutContainer}
           onPress={this.signout}
         >
-          Logout
+          로그아웃
         </Button>
       </View>
     );
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   signoutContainer: {
-    backgroundColor: '#1fcbf6',
+    backgroundColor: '#7D8387',
     borderRadius: 6,
     marginTop: 20,
     overflow:'hidden',

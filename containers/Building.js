@@ -4,7 +4,7 @@ import { ListView, StyleSheet, Text, TouchableHighlight, View } from 'react-nati
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from 'react-native-button';
 
-import RefreshableView from '../components/RefreshableView';
+import RefreshableList from '../components/RefreshableList';
 
 import routes from '../routes';
 
@@ -12,8 +12,8 @@ export default React.createClass({
   statics: {
     rightButton: (nav) => {
       return (
-        <Button onPress={() => nav.push(routes.profile())}>
-          <Ionicons name='ios-person' size={23} color='white' />
+        <Button>
+          <Ionicons name='ios-search' size={23} color='white' />
         </Button>
       );
     },
@@ -24,19 +24,18 @@ export default React.createClass({
   onRefresh() {
   },
   renderRow(row, sectionID, rowID, highlightRow) {
-    const { brands, push } = this.props;
-    const buildingId = _.get(brands[_.head(row).brandId], 'data.location.building.id');
-    const buildingName = _.get(brands[_.head(row).brandId], 'data.location.building.name.ko');
+    const { brands } = this.props;
+    const brand = brands[_.head(row).brandId];
     return (
       <TouchableHighlight
-        onPress={() => push(routes.building(buildingName, { buildingId }))}
+        onPress={() => console.log('cc')}
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >
         <View style={styles.row}>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{buildingName}</Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{_.get(brand, 'name.ko')}</Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{`${_.get(brand, 'data.location.floor')} ${_.get(brand, 'data.location.flatNumber')}`}</Text>
           <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(row)}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(_.uniqBy(row, 'brandId'))}</Text>
           <Text style={[styles.sectionText, { flex: 1 }]}></Text>
         </View>
       </TouchableHighlight>
@@ -46,16 +45,16 @@ export default React.createClass({
     return (
       <View style={styles.section}>
         <Text style={[styles.sectionText, { flex: 1 }]}>
-          빌딩명
+          매장명
         </Text>
         <Text style={[styles.sectionText, { flex: 1 }]}>
-          전체주문수
+          위치
         </Text>
         <Text style={[styles.sectionText, { flex: 1 }]}>
-          주문매장수
+          전체주문
         </Text>
         <Text style={[styles.sectionText, { flex: 1 }]}>
-          픽업완료매장
+          완료된 주문
         </Text>
       </View>
     );
@@ -70,35 +69,20 @@ export default React.createClass({
     );
   },
   render() {
-    const { date, orders, brands } = this.props;
-    const map = _.groupBy(orders, (o) => _.get(brands[o.brandId], 'data.location.building.id', ''));
+    const { date, orders, brands, buildingId } = this.props;
+    const brandOrders = _.chain(orders)
+      .filter((o) => (_.get(brands[o.brandId], 'data.location.building.id') === buildingId))
+      .groupBy('brandId').value();
     // FIXME: possible performance issue...
-    const dataSource = this.dataSource.cloneWithRows(_.values(map));
+    const dataSource = this.dataSource.cloneWithRows(_.values(brandOrders));
     return (
-      <RefreshableView onRefresh={this.onRefresh} contentContainerStyle={styles.container}>
-        <View style={styles.summary}>
-          <View style={[styles.summaryItem, { backgroundColor: '#9FA8DA' }]}>
-            <Text style={[styles.summaryText]}>오늘의 픽업</Text>
-            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{date.substring(5, 10)}</Text>
-            <Text style={[styles.summaryText]}>AM 02:00</Text>
-          </View>
-          <View style={[styles.summaryItem, { backgroundColor: '#121854'}]}>
-            <Text style={[styles.summaryText]}>주문처리현황</Text>
-            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{_.size(orders)}</Text>
-          </View>
-          <View style={[styles.summaryItem, { backgroundColor: '#3949AB'}]}>
-            <Text style={[styles.summaryText]}>픽업매장현황</Text>
-            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{_.size(brands)}</Text>
-          </View>
-        </View>
-        <ListView
-          dataSource={dataSource}
-          renderRow={this.renderRow}
-          renderSectionHeader={this.renderSectionHeader}
-          renderSeparator={this.renderSeparator}
-          enableEmptySections
-        />
-      </RefreshableView>
+      <RefreshableList
+        dataSource={dataSource}
+        renderRow={this.renderRow}
+        renderSectionHeader={this.renderSectionHeader}
+        renderSeparator={this.renderSeparator}
+        enableEmptySections
+      />
     );
   }
 });
