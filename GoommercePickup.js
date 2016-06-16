@@ -13,7 +13,16 @@ if (__DEV__) {
 } else {
   configApiClient({ apiRoot: 'https://www.linkshops.com' });
 }
-const store = configureStore();
+
+const store = configureStore({
+  search(state = {}, action) {
+    const { payload, type } = action;
+    if (type === 'BRAND_SEARCH') {
+      return _.assign({}, state, { brand: payload });
+    }
+    return state;
+  },
+});
 
 store.subscribe(() => {
   const { error: { message, status } } = store.getState();

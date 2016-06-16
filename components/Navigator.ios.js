@@ -3,39 +3,9 @@ import React from 'react';
 import { Navigator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from 'react-native-button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux'
 
-const NavigationBarRouteMapper = {
-  LeftButton(route, navigator, index, navState) {
-    if (index === 0) {
-      return null;
-    }
-    return (
-      <Button onPress={() => navigator.pop()} containerStyle={styles.navBarButton}>
-        <Ionicons name='ios-arrow-back' size={23} color='white' />
-      </Button>
-    );
-  },
-  RightButton(route, navigator, index, navState) {
-    const { component } = route;
-    const rightButton = component.rightButton || _.get(component, 'WrappedComponent.rightButton');
-    if (rightButton) {
-      return (
-        <View style={styles.navBarButton}>
-          {rightButton(navigator)}
-        </View>
-      );
-    }
-  },
-  Title(route, navigator, index, navState) {
-    return (
-      <Text style={styles.navBarTitleText}>
-        {route.title}
-      </Text>
-    );
-  },
-};
-
-export default React.createClass({
+export default connect()(React.createClass({
   renderScene(route, navigator) {
     return (
       <View style={styles.scene}>
@@ -43,13 +13,52 @@ export default React.createClass({
       </View>
     );
   },
+  routeMapper() {
+    const { dispatch } = this.props;
+    return {
+      LeftButton(route, navigator, index, navState) {
+        if (index === 0) {
+          return null;
+        }
+        return (
+          <Button onPress={() => navigator.pop()} containerStyle={styles.navBarButton}>
+            <Ionicons name='ios-arrow-back' size={23} color='white' />
+          </Button>
+        );
+      },
+      RightButton(route, navigator, index, navState) {
+        const { component } = route;
+        const rightButton = component.rightButton || _.get(component, 'WrappedComponent.rightButton');
+        if (rightButton) {
+          return (
+            <View style={styles.navBarButton}>
+              {rightButton(navigator, route)}
+            </View>
+          );
+        }
+      },
+      Title(route, navigator, index, navState) {
+        const { title, component } = route;
+        if (_.isNil(title)) {
+          const componentTitle = component.title || _.get(component, 'WrappedComponent.title');
+          if (componentTitle) return componentTitle(dispatch);
+        } else {
+          return (
+            <Text style={styles.navBarTitleText}>
+              {title}
+            </Text>
+          );
+        }
+      },
+    };
+  },
   render() {
     return (
       <Navigator
         initialRoute={this.props.initialRoute}
         navigationBar={
           <Navigator.NavigationBar
-            routeMapper={NavigationBarRouteMapper}
+            routeMapper={this.routeMapper()}
             style={styles.navBar}
           />
         }
@@ -58,7 +67,7 @@ export default React.createClass({
       />
     );
   }
-});
+}));
 
 const styles = StyleSheet.create({
   container: {
@@ -72,6 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   navBar: {
+    flexDirection: 'row',
     backgroundColor: '#3949AB',
     borderBottomWidth: 1,
     borderBottomColor: '#3f4c5d'
