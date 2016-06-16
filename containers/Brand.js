@@ -37,7 +37,7 @@ export default React.createClass({
             <Icon name='checkbox' size={30} color='#384DA8' />
           </View>
           <Text style={[styles.sectionText, { flex: 1 }]}>{`링크# ${_.get(buyers[row.buyerId], 'data.order.name', shortId)}`}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}></Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{_.sumBy(row.orderProducts, (o) => _.get(o.data, 'stock.quantity', o.quantity))}</Text>
           <Text style={[styles.sectionText, { flex: 1 }]}></Text>
         </View>
       </TouchableHighlight>
