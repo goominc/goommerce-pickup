@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
 import { ListView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from 'react-native-button';
 
+import Icon from '../components/Icon';
 import RefreshableList from '../components/RefreshableList';
 
 import routes from '../routes';
@@ -13,7 +13,7 @@ export default React.createClass({
     rightButton: (nav, { props }) => {
       return (
         <Button onPress={() => nav.push(routes.search(props))}>
-          <Ionicons name='ios-search' size={23} color='white' />
+          <Icon name='search' size={23} color='white' />
         </Button>
       );
     },

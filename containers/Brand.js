@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import { ListView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from 'react-native-button';
 
 import RefreshableList from '../components/RefreshableList';
+import Icon from '../components/Icon';
 
 import routes from '../routes';
 
@@ -13,7 +13,7 @@ export default React.createClass({
     rightButton: (nav) => {
       return (
         <Button onPress={() => nav.popToTop()}>
-          <Ionicons name='ios-home' size={23} color='white' />
+          <Icon name='home' size={23} color='white' />
         </Button>
       );
     },
@@ -34,7 +34,7 @@ export default React.createClass({
       >
         <View style={styles.row}>
           <View style={styles.checkboxContainer}>
-            <Ionicons name='ios-checkbox' size={30} color='#384DA8' />
+            <Icon name='checkbox' size={30} color='#384DA8' />
           </View>
           <Text style={[styles.rowText, { flex: 1 }]}>{`링크# ${_.get(buyers[row.buyerId], 'data.order.name', shortId)}`}</Text>
           <Text style={[styles.rowText, { flex: 1 }]}></Text>

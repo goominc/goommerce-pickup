@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import React from 'react';
 import { ListView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from 'react-native-button';
 
+import Icon from '../components/Icon';
 import RefreshableView from '../components/RefreshableView';
 
 import routes from '../routes';
@@ -13,7 +13,7 @@ export default React.createClass({
     rightButton: (nav) => {
       return (
         <Button onPress={() => nav.push(routes.profile())}>
-          <Ionicons name='ios-person' size={23} color='white' />
+          <Icon name='person' size={23} color='white' />
         </Button>
       );
     },

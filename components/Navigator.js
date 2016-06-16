@@ -2,8 +2,9 @@ import _ from 'lodash';
 import React from 'react';
 import { BackAndroid, Navigator, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from 'react-native-button';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux'
+
+import Icon from './Icon';
 
 let _navigator;
 if (Platform.OS === 'android') {
@@ -37,7 +38,7 @@ export default connect()(React.createClass({
         }
         return (
           <Button onPress={() => navigator.pop()} containerStyle={styles.navBarButton}>
-            <Ionicons name='ios-arrow-back' size={23} color='white' />
+            <Icon name='arrow-back' size={23} color='white' />
           </Button>
         );
       },
