@@ -1,6 +1,6 @@
+import _ from 'lodash';
 import React from 'react';
 import { Alert, AsyncStorage, Platform, StyleSheet, Text, View } from 'react-native';
-
 import { Provider } from 'react-redux'
 import { config as configApiClient } from 'goommerce-api-client';
 import configureStore, { errorActions } from 'goommerce-redux';

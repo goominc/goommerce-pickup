@@ -1,12 +1,27 @@
 import _ from 'lodash';
 import React from 'react';
-import { Navigator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { BackAndroid, Navigator, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from 'react-native-button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux'
 
+let _navigator;
+if (Platform.OS === 'android') {
+  // FIXME: Uses NavigatorExperimental when it's ready.
+  BackAndroid.addEventListener('hardwareBackPress', () => {
+    if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+      _navigator.pop();
+      return true;
+    }
+    return false;
+  });
+}
+
 export default connect()(React.createClass({
   renderScene(route, navigator) {
+    if (Platform.OS === 'android') {
+      _navigator = navigator;
+    }
     return (
       <View style={styles.scene}>
         <route.component {...route.props} {...this.props.childProps} push={navigator.push} pop={navigator.pop} />
