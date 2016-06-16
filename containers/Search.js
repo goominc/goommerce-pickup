@@ -12,7 +12,7 @@ const Search = React.createClass({
       return (
         <View style={{ width: width - 80, flex: 1, justifyContent: 'center' }}>
           <TextInput
-            style={{ height: 30, backgroundColor: '#9FA9D8' }}
+            style={{ height: 30, backgroundColor: '#9FA9D8', fontSize: 16, paddingVertical: 0 }}
             placeholder='매장찾기'
             autoCorrect={false}
             autoFocus

@@ -92,26 +92,20 @@ const styles = StyleSheet.create({
   },
   scene: {
     flex: 1,
-    paddingTop: 64, // NavigationBar
-    // paddingBottom: 50, // TabBarIOS
+    paddingTop: Platform.OS === 'ios' ? 64 : 56, // NavigationBar
     backgroundColor: 'white',
   },
   navBar: {
-    flexDirection: 'row',
     backgroundColor: '#3949AB',
-    borderBottomWidth: 1,
-    borderBottomColor: '#3f4c5d'
   },
   navBarTitleText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 16,
-    marginVertical: 9,
+    fontSize: 20,
+    marginVertical: Platform.OS === 'ios' ? 9 : 15,
   },
   navBarButton: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginVertical: 9,
+    marginVertical: Platform.OS === 'ios' ? 9 : 15,
     paddingLeft: 10,
     paddingRight: 10,
   },
