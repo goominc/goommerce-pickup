@@ -36,9 +36,9 @@ export default React.createClass({
           <View style={styles.checkboxContainer}>
             <Icon name='checkbox' size={30} color='#384DA8' />
           </View>
-          <Text style={[styles.rowText, { flex: 1 }]}>{`링크# ${_.get(buyers[row.buyerId], 'data.order.name', shortId)}`}</Text>
-          <Text style={[styles.rowText, { flex: 1 }]}></Text>
-          <Text style={[styles.rowText, { flex: 1 }]}></Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{`링크# ${_.get(buyers[row.buyerId], 'data.order.name', shortId)}`}</Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}></Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}></Text>
         </View>
       </TouchableHighlight>
     );
@@ -115,11 +115,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 2,
     backgroundColor: 'white',
-  },
-  rowText: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    paddingVertical: 10,
   },
   rowSeparator: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
