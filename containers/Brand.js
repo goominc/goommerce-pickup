@@ -9,6 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 import RefreshableList from '../components/RefreshableList';
 import Icon from '../components/Icon';
+import { isPickedUp } from './util';
 
 import routes from '../routes';
 
@@ -51,7 +52,7 @@ const Brand = React.createClass({
     const { buyers, unclePickUp, uncleCancelPickUp, onRefresh } = this.props;
     const shortId = _.padStart(row.orderId, 3, '0').substr(-3);
     const at = _.chain(row.logs).filter({ type: 2001 }).maxBy('id').get('createdAt').value();
-    const pickedUp = !(_.some(row.orderProducts, { status: 103 }));
+    const pickedUp = isPickedUp(row);
     return (
       <TouchableHighlight
         onPress={() => {
@@ -68,6 +69,7 @@ const Brand = React.createClass({
         <View style={styles.row}>
           <View style={styles.checkboxContainer}>
             {pickedUp && <Icon name='checkbox' size={30} color='#384DA8' />}
+            {!pickedUp && <Icon name='square-outline' size={30} color='#6D6D6D' />}
           </View>
           <Text style={styles.rowText}>{`링크# ${_.get(buyers[row.buyerId], 'data.order.name', shortId)}`}</Text>
           <Text style={styles.rowText}>{_.sumBy(row.orderProducts, (o) => _.get(o.data, 'stock.quantity', o.quantity))}</Text>

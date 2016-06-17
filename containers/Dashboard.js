@@ -5,6 +5,7 @@ import Button from 'react-native-button';
 
 import Icon from '../components/Icon';
 import RefreshableView from '../components/RefreshableView';
+import { isPickedUp } from './util';
 
 import routes from '../routes';
 
@@ -23,19 +24,18 @@ export default React.createClass({
   }),
   renderRow(row, sectionID, rowID, highlightRow) {
     const { brands, push } = this.props;
-    const buildingId = _.get(brands[_.head(row).brandId], 'data.location.building.id');
-    const buildingName = _.get(brands[_.head(row).brandId], 'data.location.building.name.ko');
+    const buildingName = _.get(brands[_.head(row.orders).brandId], 'data.location.building.name.ko');
     return (
       <TouchableHighlight
-        onPress={() => push(routes.building(buildingName, { buildingId }))}
+        onPress={() => push(routes.building(buildingName, { buildingId: row.buildingId }))}
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >
         <View style={styles.row}>
           <Text style={[styles.sectionText, { flex: 1 }]}>{buildingName}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(row)}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(_.uniqBy(row, 'brandId'))}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}></Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(row.orders)}</Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(_.uniqBy(row.orders, 'brandId'))}</Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{row.pickedUp}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -69,9 +69,16 @@ export default React.createClass({
   },
   render() {
     const { date, orders, brands } = this.props;
-    const map = _.groupBy(orders, (o) => _.get(brands[o.brandId], 'data.location.building.id', ''));
+    const rows = _.chain(orders)
+      .groupBy((o) => _.get(brands[o.brandId], 'data.location.building.id'))
+      .map((orders, buildingId) => ({
+        orders,
+        buildingId: +buildingId,
+        pickedUp: _.chain(orders).groupBy('brandId').filter((o) => _.every(o, isPickedUp)).size().value(),
+      }))
+      .value();
     // FIXME: possible performance issue...
-    const dataSource = this.dataSource.cloneWithRows(_.values(map));
+    const dataSource = this.dataSource.cloneWithRows(rows);
     return (
       <RefreshableView onRefresh={this.props.onRefresh} contentContainerStyle={styles.container}>
         <View style={styles.summary}>
@@ -82,11 +89,13 @@ export default React.createClass({
           </View>
           <View style={[styles.summaryItem, { backgroundColor: '#121854'}]}>
             <Text style={[styles.summaryText]}>주문처리현황</Text>
-            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{_.size(orders)}</Text>
+            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{_.chain(orders).filter(isPickedUp).size().value()}</Text>
+            <Text style={[styles.summaryText]}>/{_.size(orders)}건</Text>
           </View>
           <View style={[styles.summaryItem, { backgroundColor: '#3949AB'}]}>
             <Text style={[styles.summaryText]}>픽업매장현황</Text>
-            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{_.size(brands)}</Text>
+            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{_.sumBy(rows, 'pickedUp')}</Text>
+            <Text style={[styles.summaryText]}>/{_.size(brands)}매장</Text>
           </View>
         </View>
         <ListView

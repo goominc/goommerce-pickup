@@ -5,6 +5,7 @@ import Button from 'react-native-button';
 
 import Icon from '../components/Icon';
 import RefreshableList from '../components/RefreshableList';
+import { isPickedUp } from './util';
 
 import routes from '../routes';
 
@@ -26,17 +27,18 @@ export default React.createClass({
     const brand = brands[_.head(row).brandId];
     const brandName = _.get(brand, 'name.ko');
     const location = `${_.get(brand, 'data.location.floor')} ${_.get(brand, 'data.location.flatNumber')}`;
+    const pickedUp = _.chain(row).filter(isPickedUp).size().value();
     return (
       <TouchableHighlight
         onPress={() => push(routes.brand(`${brandName} ${location}`, { brandId: brand.id }))}
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >
-        <View style={styles.row}>
+        <View style={[styles.row, { backgroundColor: _.size(row) === pickedUp ? '#A3A3AB' : 'white' }]}>
           <Text style={[styles.sectionText, { flex: 1 }]}>{brandName}</Text>
           <Text style={[styles.sectionText, { flex: 1 }]}>{location}</Text>
           <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(row)}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}></Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{pickedUp}</Text>
         </View>
       </TouchableHighlight>
     );
