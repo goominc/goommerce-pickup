@@ -2,6 +2,26 @@ import _ from 'lodash';
 import React from 'react';
 import { ListView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import Button from 'react-native-button';
+import moment from 'moment';
+
+// FIXME: move to some other place.
+moment.locale('ko', {
+  relativeTime : {
+    future : "%s 후",
+    past : "%s 전",
+    s : "몇초",
+    m : "일분",
+    mm : "%d분",
+    h : "한시간",
+    hh : "%d시간",
+    d : "하루",
+    dd : "%d일",
+    M : "한달",
+    MM : "%d달",
+    y : "일년",
+    yy : "%d년"
+  },
+});
 
 import RefreshableList from '../components/RefreshableList';
 import Icon from '../components/Icon';
@@ -26,6 +46,7 @@ export default React.createClass({
   renderRow(row, sectionID, rowID, highlightRow) {
     const { buyers } = this.props;
     const shortId = _.padStart(row.orderId, 3, '0').substr(-3);
+    const at = _.chain(row.logs).filter({ type: 2001 }).maxBy('id').get('createdAt').value();
     return (
       <TouchableHighlight
         onPress={() => console.log('cc')}
@@ -38,7 +59,7 @@ export default React.createClass({
           </View>
           <Text style={[styles.sectionText, { flex: 1 }]}>{`링크# ${_.get(buyers[row.buyerId], 'data.order.name', shortId)}`}</Text>
           <Text style={[styles.sectionText, { flex: 1 }]}>{_.sumBy(row.orderProducts, (o) => _.get(o.data, 'stock.quantity', o.quantity))}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}></Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{at && moment(at).fromNow()}</Text>
         </View>
       </TouchableHighlight>
     );
