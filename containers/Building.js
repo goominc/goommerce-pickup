@@ -26,6 +26,9 @@ export default React.createClass({
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
+  getInitialState() {
+    return { sort: 'location' };
+  },
   renderRow(row, sectionID, rowID, highlightRow) {
     const { push } = this.props;
     const brandName = _.get(row.brand, 'name.ko');
@@ -46,20 +49,27 @@ export default React.createClass({
     );
   },
   renderSectionHeader(sectionData, sectionID) {
+    const { sort } = this.state;
     return (
       <View style={styles.section}>
         <Text style={[styles.sectionText, { flex: 1 }]}>
           매장명
         </Text>
-        <Text style={[styles.sectionText, { flex: 1 }]}>
-          위치
-        </Text>
-        <Text style={[styles.sectionText, { flex: 1 }]}>
-          전체주문
-        </Text>
-        <Text style={[styles.sectionText, { flex: 1 }]}>
-          완료된 주문
-        </Text>
+        <Button containerStyle={{ flex: 1 }} onPress={() => this.setState({ sort: 'location' })}>
+          <Text style={[styles.sectionText, { color: sort === 'location' ? 'white' : 'black' }]}>
+            위치
+          </Text>
+        </Button>
+        <Button containerStyle={{ flex: 1 }} onPress={() => this.setState({ sort: 'orderCount' })}>
+          <Text style={[styles.sectionText, { color: sort === 'orderCount' ? 'white' : 'black' }]}>
+            전체주문
+          </Text>
+        </Button>
+        <Button containerStyle={{ flex: 1 }} onPress={() => this.setState({ sort: 'pickedUpCount' })}>
+          <Text style={[styles.sectionText, { color: sort === 'pickedUpCount' ? 'white' : 'black' }]}>
+            완료된 주문
+          </Text>
+        </Button>
       </View>
     );
   },
@@ -82,7 +92,13 @@ export default React.createClass({
         pickedUpCount: _.chain(orders).filter(isPickedUp).size().value(),
       })).value().sort((a, b) => {
         const pickedUp = (o) => (_.size(o.orders) === o.pickedUpCount);
-        return (pickedUp(a) - pickedUp(b)) || naturalCompare(floor(a), floor(b)) || naturalCompare(flatNumber(a), flatNumber(b));
+        const defaultSort = pickedUp(a) - pickedUp(b);
+        if (this.state.sort === 'location') {
+          return defaultSort || naturalCompare(floor(a), floor(b)) || naturalCompare(flatNumber(a), flatNumber(b));
+        } else if (this.state.sort === 'orderCount') {
+          return defaultSort || (_.size(b.orders) - _.size(a.orders));
+        }
+        return defaultSort || (b.pickedUpCount - a.pickedUpCount);
       });
     // FIXME: possible performance issue...
     const dataSource = this.dataSource.cloneWithRows(rows);
