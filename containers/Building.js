@@ -21,8 +21,6 @@ export default React.createClass({
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
-  onRefresh() {
-  },
   renderRow(row, sectionID, rowID, highlightRow) {
     const { brands, push } = this.props;
     const brand = brands[_.head(row).brandId];
@@ -84,6 +82,7 @@ export default React.createClass({
         renderSectionHeader={this.renderSectionHeader}
         renderSeparator={this.renderSeparator}
         enableEmptySections
+        onRefresh={this.props.onRefresh}
       />
     );
   }

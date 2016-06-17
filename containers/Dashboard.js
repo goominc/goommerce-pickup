@@ -21,8 +21,6 @@ export default React.createClass({
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
-  onRefresh() {
-  },
   renderRow(row, sectionID, rowID, highlightRow) {
     const { brands, push } = this.props;
     const buildingId = _.get(brands[_.head(row).brandId], 'data.location.building.id');
@@ -75,7 +73,7 @@ export default React.createClass({
     // FIXME: possible performance issue...
     const dataSource = this.dataSource.cloneWithRows(_.values(map));
     return (
-      <RefreshableView onRefresh={this.onRefresh} contentContainerStyle={styles.container}>
+      <RefreshableView onRefresh={this.props.onRefresh} contentContainerStyle={styles.container}>
         <View style={styles.summary}>
           <View style={[styles.summaryItem, { backgroundColor: '#9FA8DA' }]}>
             <Text style={[styles.summaryText]}>오늘의 픽업</Text>
