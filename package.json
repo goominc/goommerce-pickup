@@ -10,6 +10,7 @@
     "goommerce-redux": "github:goominc/goommerce-redux",
     "lodash": "^4.13.1",
     "moment": "^2.13.0",
+    "natural-compare-lite": "^1.4.0",
     "react": "^15.1.0",
     "react-native": "^0.27.2",
     "react-native-button": "^1.6.0",

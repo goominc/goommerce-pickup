@@ -51,7 +51,7 @@ const Brand = React.createClass({
   renderRow(row, sectionID, rowID, highlightRow) {
     const { buyers, unclePickUp, uncleCancelPickUp, onRefresh } = this.props;
     const shortId = _.padStart(row.orderId, 3, '0').substr(-3);
-    const at = _.chain(row.logs).filter({ type: 2001 }).maxBy('id').get('createdAt').value();
+    const at = _.chain(row.logs).filter({ type: 3001 }).maxBy('id').get('createdAt').value();
     const pickedUp = isPickedUp(row);
     return (
       <TouchableHighlight

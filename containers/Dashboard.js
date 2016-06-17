@@ -31,11 +31,11 @@ export default React.createClass({
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >
-        <View style={styles.row}>
+        <View style={[styles.row, { backgroundColor: row.pickedUpBrandCount === row.brandCount ? '#A3A3AB' : 'white'}]}>
           <Text style={[styles.sectionText, { flex: 1 }]}>{buildingName}</Text>
           <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(row.orders)}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(_.uniqBy(row.orders, 'brandId'))}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{row.pickedUp}</Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{row.brandCount}</Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{row.pickedUpBrandCount}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -74,8 +74,10 @@ export default React.createClass({
       .map((orders, buildingId) => ({
         orders,
         buildingId: +buildingId,
-        pickedUp: _.chain(orders).groupBy('brandId').filter((o) => _.every(o, isPickedUp)).size().value(),
+        brandCount: _.chain(orders).uniqBy('brandId').size().value(),
+        pickedUpBrandCount: _.chain(orders).groupBy('brandId').filter((o) => _.every(o, isPickedUp)).size().value(),
       }))
+      .sortBy((o) => (o.pickedUpBrandCount - o.brandCount))
       .value();
     // FIXME: possible performance issue...
     const dataSource = this.dataSource.cloneWithRows(rows);
@@ -94,7 +96,7 @@ export default React.createClass({
           </View>
           <View style={[styles.summaryItem, { backgroundColor: '#3949AB'}]}>
             <Text style={[styles.summaryText]}>픽업매장현황</Text>
-            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{_.sumBy(rows, 'pickedUp')}</Text>
+            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{_.sumBy(rows, 'pickedUpBrandCount')}</Text>
             <Text style={[styles.summaryText]}>/{_.size(brands)}매장</Text>
           </View>
         </View>

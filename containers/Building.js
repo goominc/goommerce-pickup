@@ -2,12 +2,16 @@ import _ from 'lodash';
 import React from 'react';
 import { ListView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import Button from 'react-native-button';
+import naturalCompare from 'natural-compare-lite';
 
 import Icon from '../components/Icon';
 import RefreshableList from '../components/RefreshableList';
 import { isPickedUp } from './util';
 
 import routes from '../routes';
+
+const floor = (o) => _.get(o.brand, 'data.location.floor');
+const flatNumber = (o) => _.get(o.brand, 'data.location.flatNumber');
 
 export default React.createClass({
   statics: {
@@ -23,22 +27,20 @@ export default React.createClass({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
   renderRow(row, sectionID, rowID, highlightRow) {
-    const { brands, push } = this.props;
-    const brand = brands[_.head(row).brandId];
-    const brandName = _.get(brand, 'name.ko');
-    const location = `${_.get(brand, 'data.location.floor')} ${_.get(brand, 'data.location.flatNumber')}`;
-    const pickedUp = _.chain(row).filter(isPickedUp).size().value();
+    const { push } = this.props;
+    const brandName = _.get(row.brand, 'name.ko');
+    const location = `${floor(row)} ${flatNumber(row)}`;
     return (
       <TouchableHighlight
-        onPress={() => push(routes.brand(`${brandName} ${location}`, { brandId: brand.id }))}
+        onPress={() => push(routes.brand(`${brandName} ${location}`, { brandId: row.brand.id }))}
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >
-        <View style={[styles.row, { backgroundColor: _.size(row) === pickedUp ? '#A3A3AB' : 'white' }]}>
+        <View style={[styles.row, { backgroundColor: _.size(row.orders) === row.pickedUpCount ? '#A3A3AB' : 'white' }]}>
           <Text style={[styles.sectionText, { flex: 1 }]}>{brandName}</Text>
           <Text style={[styles.sectionText, { flex: 1 }]}>{location}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(row)}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{pickedUp}</Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(row.orders)}</Text>
+          <Text style={[styles.sectionText, { flex: 1 }]}>{row.pickedUpCount}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -72,11 +74,18 @@ export default React.createClass({
   },
   render() {
     const { date, orders, brands, buildingId } = this.props;
-    const brandOrders = _.chain(orders)
+    const rows = _.chain(orders)
       .filter((o) => (_.get(brands[o.brandId], 'data.location.building.id') === buildingId))
-      .groupBy('brandId').value();
+      .groupBy('brandId').map((orders, brandId) => ({
+        brand: brands[brandId],
+        orders,
+        pickedUpCount: _.chain(orders).filter(isPickedUp).size().value(),
+      })).value().sort((a, b) => {
+        const pickedUp = (o) => (_.size(o.orders) === o.pickedUpCount);
+        return (pickedUp(a) - pickedUp(b)) || naturalCompare(floor(a), floor(b)) || naturalCompare(flatNumber(a), flatNumber(b));
+      });
     // FIXME: possible performance issue...
-    const dataSource = this.dataSource.cloneWithRows(_.values(brandOrders));
+    const dataSource = this.dataSource.cloneWithRows(rows);
     return (
       <RefreshableList
         dataSource={dataSource}
