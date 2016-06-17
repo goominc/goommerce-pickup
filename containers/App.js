@@ -10,19 +10,9 @@ import Signin from '../components/Signin';
 import routes from '../routes';
 
 const App = React.createClass({
-  childContextTypes: {
-    refresh: PropTypes.func,
-  },
   getInitialState: function() {
     return {
       selectedTab: 'orders',
-    };
-  },
-  getChildContext() {
-    return {
-      refresh() {
-        this.props.loadUncleOrders(this.props.date);
-      },
     };
   },
   componentDidMount() {
@@ -38,7 +28,7 @@ const App = React.createClass({
     );
   },
   render() {
-    const { auth: { bearer, email } } = this.props;
+    const { auth: { bearer, email }, loadUncleOrders, date } = this.props;
     if (!bearer) {
       return <Signin signin={this.signin} />;
     }
@@ -46,8 +36,12 @@ const App = React.createClass({
       return <EmptyView text={'Loading...'} />;
     }
 
+    const childProps = _.assign({
+      onRefresh() { loadUncleOrders(date); }
+    }, _.pick(this.props, 'date', 'orders', 'brands', 'buyers'));
+
     return (
-      <Navigator initialRoute={routes.dashboard()} childProps={_.pick(this.props, 'date', 'orders', 'brands', 'buyers')} />
+      <Navigator initialRoute={routes.dashboard()} childProps={childProps} />
     );
   }
 });

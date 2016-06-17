@@ -3,6 +3,13 @@ import React from 'react';
 import { ListView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import Button from 'react-native-button';
 import moment from 'moment';
+import { connect } from 'react-redux'
+import { uncleActions } from 'goommerce-redux';
+
+import RefreshableList from '../components/RefreshableList';
+import Icon from '../components/Icon';
+
+import routes from '../routes';
 
 // FIXME: move to some other place.
 moment.locale('ko', {
@@ -23,12 +30,7 @@ moment.locale('ko', {
   },
 });
 
-import RefreshableList from '../components/RefreshableList';
-import Icon from '../components/Icon';
-
-import routes from '../routes';
-
-export default React.createClass({
+const Brand = React.createClass({
   statics: {
     rightButton: (nav) => {
       return (
@@ -41,25 +43,28 @@ export default React.createClass({
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
-  onRefresh() {
-  },
   renderRow(row, sectionID, rowID, highlightRow) {
-    const { buyers } = this.props;
+    const { buyers, unclePickUp, uncleCancelPickUp, onRefresh } = this.props;
     const shortId = _.padStart(row.orderId, 3, '0').substr(-3);
     const at = _.chain(row.logs).filter({ type: 2001 }).maxBy('id').get('createdAt').value();
+    const pickedUp = !(_.some(row.orderProducts, { status: 103 }));
     return (
       <TouchableHighlight
-        onPress={() => console.log('cc')}
+        onPress={() => {
+          const cmd = pickedUp ? uncleCancelPickUp(row.brandId, row.orderId, _.filter(row.orderProducts, { status: 200 })) :
+            unclePickUp(row.brandId, row.orderId, _.filter(row.orderProducts, { status: 103 }));
+          cmd.then(() => onRefresh());
+        }}
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >
         <View style={styles.row}>
           <View style={styles.checkboxContainer}>
-            <Icon name='checkbox' size={30} color='#384DA8' />
+            {pickedUp && <Icon name='checkbox' size={30} color='#384DA8' />}
           </View>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{`링크# ${_.get(buyers[row.buyerId], 'data.order.name', shortId)}`}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{_.sumBy(row.orderProducts, (o) => _.get(o.data, 'stock.quantity', o.quantity))}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{at && moment(at).fromNow()}</Text>
+          <Text style={styles.rowText}>{`링크# ${_.get(buyers[row.buyerId], 'data.order.name', shortId)}`}</Text>
+          <Text style={styles.rowText}>{_.sumBy(row.orderProducts, (o) => _.get(o.data, 'stock.quantity', o.quantity))}</Text>
+          <Text style={styles.rowText}>{at && moment(at).fromNow()}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -103,6 +108,7 @@ export default React.createClass({
         renderSectionHeader={this.renderSectionHeader}
         renderSeparator={this.renderSeparator}
         enableEmptySections
+        onRefresh={this.props.onRefresh}
       />
     );
   }
@@ -137,6 +143,12 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     backgroundColor: 'white',
   },
+  rowText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    paddingVertical: 8,
+    flex: 1,
+  },
   rowSeparator: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     height: 1,
@@ -162,3 +174,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default connect(null, uncleActions)(Brand);
