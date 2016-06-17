@@ -5,6 +5,7 @@ import Button from 'react-native-button';
 import moment from 'moment';
 import { connect } from 'react-redux'
 import { uncleActions } from 'goommerce-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import RefreshableList from '../components/RefreshableList';
 import Icon from '../components/Icon';
@@ -43,6 +44,9 @@ const Brand = React.createClass({
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
+  getInitialState() {
+    return { isFetching: false };
+  },
   renderRow(row, sectionID, rowID, highlightRow) {
     const { buyers, unclePickUp, uncleCancelPickUp, onRefresh } = this.props;
     const shortId = _.padStart(row.orderId, 3, '0').substr(-3);
@@ -51,9 +55,12 @@ const Brand = React.createClass({
     return (
       <TouchableHighlight
         onPress={() => {
+          this.setState({ isFetching: true });
           const cmd = pickedUp ? uncleCancelPickUp(row.brandId, row.orderId, _.filter(row.orderProducts, { status: 200 })) :
             unclePickUp(row.brandId, row.orderId, _.filter(row.orderProducts, { status: 103 }));
-          cmd.then(() => onRefresh());
+          cmd.then(() => onRefresh())
+            .then(() => this.setState({ isFetching: false }))
+            .catch(() => this.setState({ isFetching: false }));
         }}
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
@@ -102,14 +109,17 @@ const Brand = React.createClass({
     // FIXME: possible performance issue...
     const dataSource = this.dataSource.cloneWithRows(brandOrders);
     return (
-      <RefreshableList
-        dataSource={dataSource}
-        renderRow={this.renderRow}
-        renderSectionHeader={this.renderSectionHeader}
-        renderSeparator={this.renderSeparator}
-        enableEmptySections
-        onRefresh={this.props.onRefresh}
-      />
+      <View style={styles.container}>
+        <Spinner visible={this.state.isFetching} />
+        <RefreshableList
+          dataSource={dataSource}
+          renderRow={this.renderRow}
+          renderSectionHeader={this.renderSectionHeader}
+          renderSeparator={this.renderSeparator}
+          enableEmptySections
+          onRefresh={this.props.onRefresh}
+        />
+      </View>
     );
   }
 });
