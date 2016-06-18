@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 4,
     marginVertical: 10,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
     padding: 8,
   },
   summaryText: {
