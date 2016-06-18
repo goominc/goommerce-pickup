@@ -19,13 +19,15 @@ const App = React.createClass({
     const { auth, whoami, loadUncleOrders, date } = this.props;
     if (auth.bearer && !auth.email) {
       whoami();
+      loadUncleOrders(date);
     }
-    loadUncleOrders(date);
   },
   signin(email, password) {
-    this.props.login(email, password).then(
-      (auth) => AsyncStorage.setItem('bearer', auth.bearer)
-    );
+    const { loadUncleOrders, date } = this.props;
+    this.props.login(email, password).then((auth) => {
+      AsyncStorage.setItem('bearer', auth.bearer);
+      loadUncleOrders(date);
+    });
   },
   render() {
     const { auth: { bearer, email }, loadUncleOrders, date } = this.props;
