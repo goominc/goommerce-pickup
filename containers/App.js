@@ -15,18 +15,10 @@ const App = React.createClass({
       selectedTab: 'orders',
     };
   },
-  componentDidMount() {
-    const { auth, loadUncleOrders, date } = this.props;
-    if (auth.bearer) {
-      loadUncleOrders(date);
-    }
-  },
   signin(email, password) {
     const { loadUncleOrders, date } = this.props;
-    this.props.login(email, password).then((auth) => {
-      AsyncStorage.setItem('bearer', auth.bearer);
-      loadUncleOrders(date);
-    });
+    this.props.login(email, password).then((auth) =>
+      AsyncStorage.setItem('bearer', auth.bearer));
   },
   render() {
     const { auth: { bearer, email }, loadUncleOrders, date } = this.props;

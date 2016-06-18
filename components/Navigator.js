@@ -80,6 +80,7 @@ export default connect()(React.createClass({
         }
         renderScene={this.renderScene}
         style={styles.container}
+        onDidFocus={(route) => this.props.childProps.onRefresh()}
       />
     );
   }
