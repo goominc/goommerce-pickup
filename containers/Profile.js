@@ -2,29 +2,37 @@ import React from 'react';
 import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux'
 import Button from 'react-native-button';
-import { authActions, brandActions } from 'goommerce-redux';
+import { authActions } from 'goommerce-redux';
 
 import _ from 'lodash';
 
 const Profile = React.createClass({
   componentDidMount() {
-    const { brands, loadBrand } = this.props;
-    brands.forEach((b) => loadBrand(b.id));
+    const { auth, whoami } = this.props;
+    if (auth.bearer && !auth.email) {
+      whoami();
+    }
   },
   signout() {
     this.props.logout().then(() => AsyncStorage.removeItem('bearer'));
   },
+  renderPair(key, value) {
+    return (
+      <View style={styles.pairContainer}>
+        <Text style={styles.keyText}>{key}</Text>
+        <Text style={styles.valueText}>{value}</Text>
+      </View>
+    )
+  },
   render() {
-    const { brands = [] } = this.props;
+    const { auth } = this.props;
     return (
       <View style={styles.container}>
-        {brands.map((b, idx) => (
-          <View key={b.id}>
-            <Text>{_.get(b, 'name.ko')}</Text>
-            <Text>{b.pathname && `https://www.linkshops.com/${b.pathname}`}</Text>
-            <Text>{_.get(b, 'data.building.name')}</Text>
-          </View>
-        ))}
+        {this.renderPair('이름', auth.name)}
+        {this.renderPair('등급', '일반')}
+        {this.renderPair('아이디', auth.email)}
+        {this.renderPair('연락처', auth.tel)}
+        {this.renderPair('소속', '링크샵스')}
         <Button
           style={{color: 'white'}}
           styleDisabled={{color: 'red'}}
@@ -42,7 +50,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: 'column',
   },
   signoutContainer: {
     backgroundColor: '#7D8387',
@@ -52,17 +60,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 60,
     paddingVertical: 10,
   },
+  pairContainer: {
+    alignSelf: 'stretch',
+    height: 40,
+    borderBottomWidth: 1,
+    borderBottomColor: '#DBDBDB',
+    paddingBottom: 7,
+    paddingHorizontal: 7,
+    marginTop: 7,
+  },
+  keyText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  valueText: {
+    color: '#595959',
+  },
 });
 
 export default connect(
-  (state) => {
-    const { roles = [] } = state.auth;
-    const brands = _.filter(roles,
-      (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
-    brands.forEach((b) => {
-      const { key } = brandActions.loadBrand(b.id);
-      _.assign(b, state.brand[key]);
-    });
-    return { auth: state.auth, brands };
-  }, _.assign({}, authActions, brandActions)
+  (state) => ({ auth: state.auth }), authActions
 )(Profile);

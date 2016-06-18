@@ -16,9 +16,8 @@ const App = React.createClass({
     };
   },
   componentDidMount() {
-    const { auth, whoami, loadUncleOrders, date } = this.props;
-    if (auth.bearer && !auth.email) {
-      whoami();
+    const { auth, loadUncleOrders, date } = this.props;
+    if (auth.bearer) {
       loadUncleOrders(date);
     }
   },
@@ -33,9 +32,6 @@ const App = React.createClass({
     const { auth: { bearer, email }, loadUncleOrders, date } = this.props;
     if (!bearer) {
       return <Signin signin={this.signin} />;
-    }
-    if (!email) {
-      return <EmptyView text={'Loading...'} />;
     }
 
     const childProps = _.assign({
