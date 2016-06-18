@@ -37,7 +37,9 @@ const Brand = React.createClass({
     rightButton: (nav) => {
       return (
         <Button onPress={() => nav.popToTop()}>
-          <Icon name='home' size={23} color='white' />
+          <View style={{ padding: 5 }}>
+            <Icon name='home' size={23} color='white' />
+          </View>
         </Button>
       );
     },

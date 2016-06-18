@@ -18,7 +18,9 @@ export default React.createClass({
     rightButton: (nav, { props }) => {
       return (
         <Button onPress={() => nav.push(routes.search(props))}>
-          <Icon name='search' size={23} color='white' />
+          <View style={{ padding: 5 }}>
+            <Icon name='search' size={23} color='white' />
+          </View>
         </Button>
       );
     },

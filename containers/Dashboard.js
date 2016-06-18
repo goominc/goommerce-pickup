@@ -14,7 +14,9 @@ export default React.createClass({
     rightButton: (nav) => {
       return (
         <Button onPress={() => nav.push(routes.profile())}>
-          <Icon name='person' size={23} color='white' />
+          <View style={{ padding: 5 }}>
+            <Icon name='person' size={23} color='white' />
+          </View>
         </Button>
       );
     },

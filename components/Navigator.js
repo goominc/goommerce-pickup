@@ -38,7 +38,9 @@ export default connect()(React.createClass({
         }
         return (
           <Button onPress={() => navigator.pop()} containerStyle={styles.navBarButton}>
-            <Icon name='arrow-back' size={23} color='white' />
+            <View style={{ padding: 5 }}>
+              <Icon name='arrow-back' size={23} color='white' />
+            </View>
           </Button>
         );
       },
@@ -106,8 +108,8 @@ const styles = StyleSheet.create({
     marginVertical: Platform.OS === 'ios' ? 9 : 15,
   },
   navBarButton: {
-    marginVertical: Platform.OS === 'ios' ? 9 : 15,
-    paddingLeft: 10,
-    paddingRight: 10,
+    marginVertical: Platform.OS === 'ios' ? 4 : 10,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 });
