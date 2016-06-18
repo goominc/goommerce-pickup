@@ -73,7 +73,7 @@ const Brand = React.createClass({
             {pickedUp && <Icon name='checkbox' size={30} color='#384DA8' />}
             {!pickedUp && <Icon name='square-outline' size={30} color='#6D6D6D' />}
           </View>
-          <Text style={styles.rowText}>{`링크# ${_.get(buyers[row.buyerId], 'data.order.name', shortId)}`}</Text>
+          <Text style={styles.rowText}>{`링크# ${_.get(buyers[row.buyerId], 'orderName', shortId)}`}</Text>
           <Text style={styles.rowText}>{_.sumBy(row.orderProducts, (o) => _.get(o.data, 'stock.quantity', o.quantity))}</Text>
           <Text style={styles.rowText}>{at && moment(at).fromNow()}</Text>
         </View>
