@@ -694,12 +694,13 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 				);
 				INFOPLIST_FILE = GoommercePickup/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.linkshops.pickup;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.linkshops.pick-up";
 				PRODUCT_NAME = "링크샵스 픽업";
 			};
 			name = Debug;
@@ -716,12 +717,13 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 				);
 				INFOPLIST_FILE = GoommercePickup/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.linkshops.pickup;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.linkshops.pick-up";
 				PRODUCT_NAME = "링크샵스 픽업";
 			};
 			name = Release;
