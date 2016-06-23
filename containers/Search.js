@@ -127,7 +127,6 @@ const styles = StyleSheet.create({
   rowSeparator: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     height: 1,
-    marginLeft: 4,
   },
   rowSeparatorHide: {
     opacity: 0.0,
