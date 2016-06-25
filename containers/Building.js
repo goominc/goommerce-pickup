@@ -15,9 +15,9 @@ const flatNumber = (o) => _.get(o.brand, 'data.location.flatNumber');
 
 export default React.createClass({
   statics: {
-    rightButton: (nav, { props }) => {
+    rightButton: ({ props }, navigator) => {
       return (
-        <Button onPress={() => nav.push(routes.search(props))}>
+        <Button onPress={() => navigator.push(routes.search(props))}>
           <View style={{ padding: 5 }}>
             <Icon name='search' size={23} color='white' />
           </View>

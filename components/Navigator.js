@@ -50,7 +50,7 @@ export default connect()(React.createClass({
         if (rightButton) {
           return (
             <View style={styles.navBarButton}>
-              {rightButton(navigator, route)}
+              {rightButton(route, navigator, index, navState)}
             </View>
           );
         }

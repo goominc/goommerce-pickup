@@ -11,9 +11,9 @@ import routes from '../routes';
 
 export default React.createClass({
   statics: {
-    rightButton: (nav) => {
+    rightButton: (route, navigator) => {
       return (
-        <Button onPress={() => nav.push(routes.profile())}>
+        <Button onPress={() => navigator.push(routes.profile())}>
           <View style={{ padding: 5 }}>
             <Icon name='person' size={23} color='white' />
           </View>

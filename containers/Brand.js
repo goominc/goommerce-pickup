@@ -34,9 +34,9 @@ moment.locale('ko', {
 
 const Brand = React.createClass({
   statics: {
-    rightButton: (nav) => {
+    rightButton: (route, navigator) => {
       return (
-        <Button onPress={() => nav.popToTop()}>
+        <Button onPress={() => navigator.popToTop()}>
           <View style={{ padding: 5 }}>
             <Icon name='home' size={23} color='white' />
           </View>
