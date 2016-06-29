@@ -12,7 +12,7 @@ const Search = React.createClass({
       return (
         <View style={{ width: width - 80, flex: 1, justifyContent: 'center' }}>
           <TextInput
-            style={{ height: 30, backgroundColor: '#9FA9D8', fontSize: 16, paddingVertical: 0 }}
+            style={{ height: 30, backgroundColor: '#9FA9D8', fontSize: 18, color: '#aaaaaa', paddingVertical: 0 }}
             placeholder='매장찾기'
             autoCorrect={false}
             autoFocus
@@ -46,8 +46,8 @@ const Search = React.createClass({
         onHideUnderlay={() => highlightRow(null, null)}
       >
         <View style={styles.row}>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{brandName}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{location}</Text>
+          <Text style={[styles.rowText]}>{brandName}</Text>
+          <Text style={[styles.rowText]}>{location}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -131,6 +131,13 @@ const styles = StyleSheet.create({
   rowSeparatorHide: {
     opacity: 0.0,
   },
+  rowText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: '#777777',
+    flex: 1,
+  },
   section: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -142,6 +149,8 @@ const styles = StyleSheet.create({
   sectionText: {
     textAlign: 'center',
     fontWeight: 'bold',
+    fontSize: 11,
+    color: '#262d56',
   },
 });
 

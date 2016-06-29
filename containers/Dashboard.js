@@ -34,10 +34,10 @@ export default React.createClass({
         onHideUnderlay={() => highlightRow(null, null)}
       >
         <View style={[styles.row, { backgroundColor: row.pickedUpBrandCount === row.brandCount ? '#A3A3AB' : 'white'}]}>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{buildingName}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(row.orders)}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{row.brandCount}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{row.pickedUpBrandCount}</Text>
+          <Text style={[styles.rowText, { fontWeight: 'bold' }]}>{buildingName}</Text>
+          <Text style={[styles.rowText]}>{_.size(row.orders)}</Text>
+          <Text style={[styles.rowText, { color: '#121854' }]}>{row.brandCount}</Text>
+          <Text style={[styles.rowText, { color: '#3949ab' }]}>{row.pickedUpBrandCount}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -45,16 +45,16 @@ export default React.createClass({
   renderSectionHeader(sectionData, sectionID) {
     return (
       <View style={styles.section}>
-        <Text style={[styles.sectionText, { flex: 1 }]}>
+        <Text style={[styles.sectionText]}>
           빌딩명
         </Text>
-        <Text style={[styles.sectionText, { flex: 1 }]}>
+        <Text style={[styles.sectionText]}>
           전체주문수
         </Text>
-        <Text style={[styles.sectionText, { flex: 1 }]}>
+        <Text style={[styles.sectionText]}>
           주문매장수
         </Text>
-        <Text style={[styles.sectionText, { flex: 1 }]}>
+        <Text style={[styles.sectionText]}>
           픽업완료매장
         </Text>
       </View>
@@ -88,18 +88,18 @@ export default React.createClass({
         <View style={styles.summary}>
           <View style={[styles.summaryItem, { backgroundColor: '#9FA8DA' }]}>
             <Text style={[styles.summaryText]}>오늘의 픽업</Text>
-            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{date.substring(5, 10)}</Text>
+            <Text style={[styles.summaryText, { fontSize: 26, marginTop: 10 }]}>{date.substring(5, 10)}</Text>
             <Text style={[styles.summaryText]}>AM 02:00</Text>
           </View>
           <View style={[styles.summaryItem, { backgroundColor: '#121854'}]}>
             <Text style={[styles.summaryText]}>주문처리현황</Text>
-            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{_.chain(orders).filter(isPickedUp).size().value()}</Text>
-            <Text style={[styles.summaryText]}>/{_.size(orders)}건</Text>
+            <Text style={[styles.summaryText, { fontSize: 36, marginTop: 10 }]}>{_.chain(orders).filter(isPickedUp).size().value()}</Text>
+            <Text style={[styles.summaryText, { fontSize: 13, textAlign: 'right' }]}>/{_.size(orders)}건</Text>
           </View>
           <View style={[styles.summaryItem, { backgroundColor: '#3949AB'}]}>
             <Text style={[styles.summaryText]}>픽업매장현황</Text>
-            <Text style={[styles.summaryText, { fontSize: 25, marginTop: 10 }]}>{_.sumBy(rows, 'pickedUpBrandCount')}</Text>
-            <Text style={[styles.summaryText]}>/{_.size(brands)}매장</Text>
+            <Text style={[styles.summaryText, { fontSize: 36, marginTop: 10 }]}>{_.sumBy(rows, 'pickedUpBrandCount')}</Text>
+            <Text style={[styles.summaryText, { fontSize: 13, textAlign: 'right' }]}>/{_.size(brands)}매장</Text>
           </View>
         </View>
         <ListView
@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   summaryText: {
     color: 'white',
     textAlign: 'center',
+    fontSize: 12,
     fontWeight: 'bold',
   },
   row: {
@@ -161,5 +162,14 @@ const styles = StyleSheet.create({
   sectionText: {
     textAlign: 'center',
     fontWeight: 'bold',
+    fontSize: 11,
+    color: '#191d48',
+    flex: 1,
+  },
+  rowText: {
+    textAlign: 'center',
+    fontSize: 12,
+    color: '#333333',
+    flex: 1,
   },
 });

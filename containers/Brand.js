@@ -70,12 +70,12 @@ const Brand = React.createClass({
       >
         <View style={styles.row}>
           <View style={styles.checkboxContainer}>
-            {pickedUp && <Icon name='checkbox' size={30} color='#384DA8' />}
-            {!pickedUp && <Icon name='square-outline' size={30} color='#6D6D6D' />}
+            {pickedUp && <Icon name='checkbox' size={25} color='#384DA8' />}
+            {!pickedUp && <Icon name='square-outline' size={25} color='#777777' />}
           </View>
           <Text style={styles.rowText}>{`링크# ${_.get(buyers[row.buyerId], 'orderName', shortId)}`}</Text>
-          <Text style={styles.rowText}>{_.sumBy(row.orderProducts, (o) => _.get(o.data, 'stock.quantity', o.quantity))}</Text>
-          <Text style={styles.rowText}>{at && moment(at).fromNow()}</Text>
+          <Text style={[styles.rowText, { fontWeight: 'normal' }]}>{_.sumBy(row.orderProducts, (o) => _.get(o.data, 'stock.quantity', o.quantity))}</Text>
+          <Text style={[styles.rowText, { fontWeight: 'normal' }]}>{at && moment(at).fromNow()}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -157,18 +157,19 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     backgroundColor: 'white',
   },
-  rowText: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    paddingVertical: 8,
-    flex: 1,
-  },
   rowSeparator: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     height: 1,
   },
   rowSeparatorHide: {
     opacity: 0.0,
+  },
+  rowText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: '#777777',
+    flex: 1,
   },
   section: {
     flexDirection: 'row',
@@ -181,6 +182,8 @@ const styles = StyleSheet.create({
   sectionText: {
     textAlign: 'center',
     fontWeight: 'bold',
+    fontSize: 11,
+    color: '#262d56',
   },
   checkboxContainer: {
     flex: 1,

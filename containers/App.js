@@ -13,7 +13,7 @@ import routes from '../routes';
 const App = React.createClass({
   getInitialState: function() {
     return {
-      date: moment().add(7, 'h').format('YYYY-MM-DD'),
+      date: moment().add(8, 'h').format('YYYY-MM-DD'),
     };
   },
   signin(email, password) {
@@ -27,7 +27,7 @@ const App = React.createClass({
     }
 
     const onRefresh = () => {
-      this.setState({ date: moment().add(7, 'h').format('YYYY-MM-DD') });
+      this.setState({ date: moment().add(8, 'h').format('YYYY-MM-DD') });
       loadUncleOrders(this.state.date);
     };
 

@@ -42,35 +42,39 @@ export default React.createClass({
         onHideUnderlay={() => highlightRow(null, null)}
       >
         <View style={[styles.row, { backgroundColor: _.size(row.orders) === row.pickedUpCount ? '#A3A3AB' : 'white' }]}>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{brandName}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{location}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{_.size(row.orders)}</Text>
-          <Text style={[styles.sectionText, { flex: 1 }]}>{row.pickedUpCount}</Text>
+          <Text style={[styles.rowText]}>{brandName}</Text>
+          <Text style={[styles.rowText]}>{location}</Text>
+          <Text style={[styles.rowText, { color: '#121854' }]}>{_.size(row.orders)}</Text>
+          <Text style={[styles.rowText, { color: '#3949ab' }]}>{row.pickedUpCount}</Text>
         </View>
       </TouchableHighlight>
     );
   },
   renderSectionHeader(sectionData, sectionID) {
     const { sort } = this.state;
+    const color = (name) => (sort === name ? 'white' : '#262d56');
     return (
       <View style={styles.section}>
         <Text style={[styles.sectionText, { flex: 1 }]}>
           매장명
         </Text>
-        <Button containerStyle={{ flex: 1 }} onPress={() => this.setState({ sort: 'location' })}>
-          <Text style={[styles.sectionText, { color: sort === 'location' ? 'white' : 'black' }]}>
+        <Button containerStyle={styles.column} onPress={() => this.setState({ sort: 'location' })}>
+          <Text style={[styles.sectionText, { color: color('location') }]}>
             위치
           </Text>
+          <Icon name='arrow-round-up' size={18} style={{ marginLeft: 4, color: color('location') }} />
         </Button>
-        <Button containerStyle={{ flex: 1 }} onPress={() => this.setState({ sort: 'orderCount' })}>
-          <Text style={[styles.sectionText, { color: sort === 'orderCount' ? 'white' : 'black' }]}>
+        <Button containerStyle={styles.column} onPress={() => this.setState({ sort: 'orderCount' })}>
+          <Text style={[styles.sectionText, { color: color('orderCount') }]}>
             전체주문
           </Text>
+          <Icon name='arrow-round-up' size={18} style={{ marginLeft: 4, color: color('orderCount') }} />
         </Button>
-        <Button containerStyle={{ flex: 1 }} onPress={() => this.setState({ sort: 'pickedUpCount' })}>
-          <Text style={[styles.sectionText, { color: sort === 'pickedUpCount' ? 'white' : 'black' }]}>
+        <Button containerStyle={styles.column} onPress={() => this.setState({ sort: 'pickedUpCount' })}>
+          <Text style={[styles.sectionText, { color: color('pickedUpCount') }]}>
             완료된 주문
           </Text>
+          <Icon name='arrow-round-up' size={18} style={{ marginLeft: 4, color: color('pickedUpCount') }} />
         </Button>
       </View>
     );
@@ -153,6 +157,13 @@ const styles = StyleSheet.create({
   rowSeparatorHide: {
     opacity: 0.0,
   },
+  rowText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: '#777777',
+    flex: 1,
+  },
   section: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -164,5 +175,12 @@ const styles = StyleSheet.create({
   sectionText: {
     textAlign: 'center',
     fontWeight: 'bold',
+    fontSize: 11,
+    color: '#262d56',
+  },
+  column: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });
