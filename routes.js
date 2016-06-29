@@ -5,7 +5,7 @@ import Profile from './containers/Profile';
 import Search from './containers/Search';
 
 export default {
-  brand: (title, props) => ({ title, component: Brand, props }),
+  brand: (title, subtitle, props) => ({ title, subtitle, component: Brand, props }),
   building: (title, props) => ({ title, component: Building, props }),
   dashboard: (props) => ({ title: 'LinkShops', component: Dashboard, props }),
   profile: (props) => ({ title: '내 정보', component: Profile, props }),

@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   input: {
+    alignSelf: 'stretch',
     backgroundColor: '#EBEDF9',
     borderRadius: 6,
     fontSize: 14,

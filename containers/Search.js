@@ -12,7 +12,7 @@ const Search = React.createClass({
       return (
         <View style={{ width: width - 80, flex: 1, justifyContent: 'center' }}>
           <TextInput
-            style={{ height: 30, backgroundColor: '#9FA9D8', fontSize: 18, color: '#aaaaaa', paddingVertical: 0 }}
+            style={{ height: 30, backgroundColor: '#9FA9D8', fontSize: 18, paddingVertical: 0 }}
             placeholder='매장찾기'
             autoCorrect={false}
             autoFocus
@@ -41,7 +41,7 @@ const Search = React.createClass({
     const location = `${_.get(row, 'data.location.floor')} ${_.get(row, 'data.location.flatNumber')}`;
     return (
       <TouchableHighlight
-        onPress={() => push(routes.brand(`${brandName} ${location}`, { brandId: row.id }))}
+        onPress={() => push(routes.brand(brandName, location, { brandId: row.id }))}
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >

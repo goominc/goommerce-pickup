@@ -56,15 +56,21 @@ export default connect()(React.createClass({
         }
       },
       Title(route, navigator, index, navState) {
-        const { title, component } = route;
+        const { title, subtitle, component } = route;
         if (_.isNil(title)) {
           const componentTitle = component.title || _.get(component, 'WrappedComponent.title');
           if (componentTitle) return componentTitle(dispatch);
         } else {
           return (
-            <Text style={styles.navBarTitleText}>
-              {title}
-            </Text>
+            <View>
+              <Text style={[styles.navBarTitleText, subtitle && {
+                marginTop: Platform.OS === 'ios' ? 2 : 6,
+                marginBottom: 0,
+              }]}>
+                {title}
+              </Text>
+              {subtitle && <Text style={styles.navBarSubtitleText}>{subtitle}</Text>}
+            </View>
           );
         }
       },
@@ -103,9 +109,13 @@ const styles = StyleSheet.create({
   },
   navBarTitleText: {
     color: 'white',
-    fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 18,
     marginVertical: Platform.OS === 'ios' ? 9 : 15,
+  },
+  navBarSubtitleText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 12,
   },
   navBarButton: {
     marginVertical: Platform.OS === 'ios' ? 4 : 10,

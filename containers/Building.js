@@ -37,7 +37,7 @@ export default React.createClass({
     const location = `${floor(row)} ${flatNumber(row)}`;
     return (
       <TouchableHighlight
-        onPress={() => push(routes.brand(`${brandName} ${location}`, { brandId: row.brand.id }))}
+        onPress={() => push(routes.brand(brandName, location, { brandId: row.brand.id }))}
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >
