@@ -7,7 +7,7 @@ import routes from '../routes';
 
 const Search = React.createClass({
   statics: {
-    title: (dispatch) => {
+    title: ({ dispatch }) => {
       const { width } = Dimensions.get('window');
       return (
         <View style={{ width: width - 80, flex: 1, justifyContent: 'center' }}>

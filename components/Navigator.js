@@ -30,7 +30,7 @@ export default connect()(React.createClass({
     );
   },
   routeMapper() {
-    const { dispatch } = this.props;
+    const { dispatch, childProps } = this.props;
     return {
       LeftButton(route, navigator, index, navState) {
         if (index === 0) {
@@ -57,9 +57,9 @@ export default connect()(React.createClass({
       },
       Title(route, navigator, index, navState) {
         const { title, subtitle, component } = route;
-        if (_.isNil(title)) {
-          const componentTitle = component.title || _.get(component, 'WrappedComponent.title');
-          if (componentTitle) return componentTitle(dispatch);
+        const componentTitle = component.title || _.get(component, 'WrappedComponent.title');
+        if (componentTitle) {
+          return componentTitle({ route, dispatch, ...childProps });
         } else {
           return (
             <View>

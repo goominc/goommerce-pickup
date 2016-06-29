@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import { ListView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { ListView, Platform, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import Button from 'react-native-button';
 import naturalCompare from 'natural-compare-lite';
 
@@ -15,13 +15,29 @@ const flatNumber = (o) => _.get(o.brand, 'data.location.flatNumber');
 
 export default React.createClass({
   statics: {
-    rightButton: ({ props }, navigator) => {
+    rightButton({ props }, navigator) {
       return (
         <Button onPress={() => navigator.push(routes.search(props))}>
           <View style={{ padding: 5 }}>
             <Icon name='search' size={23} color='white' />
           </View>
         </Button>
+      );
+    },
+    title({ route, orders, brands }) {
+      const { buildingId } = route.props;
+      const filtered = _.filter(orders,
+        (o) => (_.get(brands[o.brandId], 'data.location.building.id') === buildingId));
+      const pickedUp = _.filter(filtered, isPickedUp);
+      return (
+        <View>
+          <Text style={{ color: 'white', fontSize: 18, marginTop: Platform.OS === 'ios' ? 2 : 6 }}>
+            {route.title}
+          </Text>
+          <Text style={{ color: 'white', fontSize: 12 }}>
+            {`전체주문 ${_.size(filtered)} / 완료된주문 ${_.size(pickedUp)}`}
+          </Text>
+        </View>
       );
     },
   },
