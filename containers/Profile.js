@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { Alert, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux'
 import Button from 'react-native-button';
 import { authActions } from 'goommerce-redux';
@@ -14,7 +14,12 @@ const Profile = React.createClass({
     }
   },
   signout() {
-    this.props.logout().then(() => AsyncStorage.removeItem('bearer'));
+    const onPress = () => this.props.logout().then(
+      () => AsyncStorage.removeItem('bearer'));
+    Alert.alert(
+      '로그아웃', '링크샵스 픽업에서 로그아웃됩니다.',
+      [ { text: '확인', onPress }, { text: '취소' } ]
+    );
   },
   renderPair(key, value) {
     return (
