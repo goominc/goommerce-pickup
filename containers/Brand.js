@@ -59,8 +59,8 @@ const Brand = React.createClass({
       <TouchableHighlight
         onPress={() => {
           this.setState({ isFetching: true });
-          const cmd = pickedUp ? uncleCancelPickUp(row.brandId, row.orderId, _.filter(row.orderProducts, { status: 200 })) :
-            unclePickUp(row.brandId, row.orderId, _.filter(row.orderProducts, { status: 103 }));
+          const cmd = pickedUp ? uncleCancelPickUp(row.brandId, row.orderId, row.orderProducts) :
+            unclePickUp(row.brandId, row.orderId, row.orderProducts);
           cmd.then(() => onRefresh())
             .then(() => this.setState({ isFetching: false }))
             .catch(() => this.setState({ isFetching: false }));
