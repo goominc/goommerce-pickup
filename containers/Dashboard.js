@@ -34,7 +34,7 @@ export default React.createClass({
         onHideUnderlay={() => highlightRow(null, null)}
       >
         <View style={[styles.row, { backgroundColor: row.pickedUpBrandCount === row.brandCount ? '#A3A3AB' : 'white'}]}>
-          <Text style={[styles.rowText, { fontWeight: 'bold' }]}>{buildingName}</Text>
+          <Text style={[styles.rowText, { fontWeight: 'bold', flex: 2 }]}>{buildingName}</Text>
           <Text style={[styles.rowText]}>{_.size(row.orders)}</Text>
           <Text style={[styles.rowText, { color: '#121854' }]}>{row.brandCount}</Text>
           <Text style={[styles.rowText, { color: '#3949ab' }]}>{row.pickedUpBrandCount}</Text>
@@ -45,7 +45,7 @@ export default React.createClass({
   renderSectionHeader(sectionData, sectionID) {
     return (
       <View style={styles.section}>
-        <Text style={[styles.sectionText]}>
+        <Text style={[styles.sectionText, { flex: 2 }]}>
           빌딩명
         </Text>
         <Text style={[styles.sectionText]}>
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 17,
     backgroundColor: 'white',
   },
   rowSeparator: {

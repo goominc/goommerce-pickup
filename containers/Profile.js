@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   pairContainer: {
     alignSelf: 'stretch',
-    height: 40,
+    paddingVertical: 17,
     borderBottomWidth: 1,
     borderBottomColor: '#DBDBDB',
     paddingBottom: 7,

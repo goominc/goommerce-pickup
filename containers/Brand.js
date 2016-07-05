@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 2,
+    paddingVertical: 11,
     backgroundColor: 'white',
   },
   rowSeparator: {

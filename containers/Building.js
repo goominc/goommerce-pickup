@@ -58,7 +58,7 @@ export default React.createClass({
         onHideUnderlay={() => highlightRow(null, null)}
       >
         <View style={[styles.row, { backgroundColor: _.size(row.orders) === row.pickedUpCount ? '#A3A3AB' : 'white' }]}>
-          <Text style={[styles.rowText]}>{brandName}</Text>
+          <Text style={[styles.rowText, { flex: 2 }]}>{brandName}</Text>
           <Text style={[styles.rowText]}>{location}</Text>
           <Text style={[styles.rowText, { color: '#121854' }]}>{_.size(row.orders)}</Text>
           <Text style={[styles.rowText, { color: '#3949ab' }]}>{row.pickedUpCount}</Text>
@@ -71,26 +71,23 @@ export default React.createClass({
     const color = (name) => (sort === name ? 'white' : '#262d56');
     return (
       <View style={styles.section}>
-        <Text style={[styles.sectionText, { flex: 1 }]}>
+        <Text style={[styles.sectionText, { flex: 2 }]}>
           매장명
         </Text>
         <Button containerStyle={styles.column} onPress={() => this.setState({ sort: 'location' })}>
           <Text style={[styles.sectionText, { color: color('location') }]}>
             위치
           </Text>
-          <Icon name='arrow-round-up' size={18} style={{ marginLeft: 4, color: color('location') }} />
         </Button>
         <Button containerStyle={styles.column} onPress={() => this.setState({ sort: 'orderCount' })}>
           <Text style={[styles.sectionText, { color: color('orderCount') }]}>
             전체주문
           </Text>
-          <Icon name='arrow-round-up' size={18} style={{ marginLeft: 4, color: color('orderCount') }} />
         </Button>
         <Button containerStyle={styles.column} onPress={() => this.setState({ sort: 'pickedUpCount' })}>
           <Text style={[styles.sectionText, { color: color('pickedUpCount') }]}>
             완료된 주문
           </Text>
-          <Icon name='arrow-round-up' size={18} style={{ marginLeft: 4, color: color('pickedUpCount') }} />
         </Button>
       </View>
     );
@@ -163,7 +160,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 17,
     backgroundColor: 'white',
   },
   rowSeparator: {
